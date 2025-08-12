@@ -1,0 +1,14 @@
+{
+  "manifest_version": 3,
+  "name": "Ashare Bot",
+  "version": "0.1.0",
+  "action": {
+    "default_popup": "index.html",
+    "default_title": "盘后热点"
+  },
+  "permissions": ["storage"],
+  "host_permissions": ["http://localhost:4000/*"],
+  "background": {
+    "service_worker": "background.js"
+  }
+}

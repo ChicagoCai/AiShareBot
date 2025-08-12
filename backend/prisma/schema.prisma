@@ -1,0 +1,52 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Stock {
+  id        Int      @id @default(autoincrement())
+  code      String   @unique
+  name      String
+  sector    String?
+  createdAt DateTime @default(now())
+  dailyData DailyData[]
+}
+
+model DailyData {
+  id           Int      @id @default(autoincrement())
+  stock        Stock    @relation(fields: [stockId], references: [id])
+  stockId      Int
+  date         DateTime
+  open         Float?
+  close        Float?
+  changePct    Float?
+  turnover     Float?
+  isLimitUp    Boolean  @default(false)
+  limitReason  String?
+  createdAt    DateTime @default(now())
+  sources      Source[] 
+}
+
+model Source {
+  id        Int      @id @default(autoincrement())
+  url       String
+  title     String?
+  content   String?  @db.Text
+  createdAt DateTime @default(now())
+  dailyData  DailyData? @relation(fields: [dailyDataId], references: [id])
+  dailyDataId Int?
+}
+
+model SectorSummary {
+  id        Int      @id @default(autoincrement())
+  date      DateTime
+  sector    String
+  changePct Float?
+  turnover  Float?
+  stockCount Int?
+  createdAt DateTime @default(now())
+}
